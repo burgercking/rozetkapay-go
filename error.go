@@ -1,6 +1,13 @@
 package rozetkapay
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var (
+	ErrFailedToValidate error = errors.New("failed to validate")
+)
 
 // ErrorResponse struct represents the error response structure.
 type ErrorResponse struct {
@@ -11,10 +18,7 @@ type ErrorResponse struct {
 	Type      string            `json:"type"`
 }
 
-// Error returns the error message.
-func (e *ErrorResponse) Error() error {
-	return fmt.Errorf(
-		"[ROZETKAPAY] Error: [code=%s] [message=%s] [payment_id=%s] [type=%s]",
-		e.Code, e.Message, e.PaymentID, e.Type,
-	)
+// ErrorCode returns the error message.
+func (e *ErrorResponse) ErrorCode() error {
+	return fmt.Errorf(string(e.Code))
 }

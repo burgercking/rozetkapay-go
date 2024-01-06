@@ -3,16 +3,12 @@ package rozetkapay
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
-)
-
-const (
-	// BaseURL string = "https://api-epdev.rozetkapay.com/api/"
-	BaseURL string = "https://api.rozetkapay.com/api/"
-	// GatewayVersion string = "0.1"
 )
 
 type Client struct {
@@ -48,10 +44,18 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		var errResp *ErrorResponse
+		if len(body) == 0 {
+			return errors.New("[ROZETKAPAY] Error: empty, HTTP status code: " + resp.Status)
+		}
 		if err := json.Unmarshal(body, &errResp); err != nil {
 			return err
 		}
-		return errResp.Error()
+		log.Printf(
+			"[ROZETKAPAY] Error: [code=%s] [message=%s] [payment_id=%s] [type=%s]",
+			errResp.Code, errResp.Message, errResp.PaymentID, errResp.Type,
+		)
+		return errResp.ErrorCode()
+
 	} else if v != nil {
 		if err := json.Unmarshal(body, v); err != nil {
 			return err
