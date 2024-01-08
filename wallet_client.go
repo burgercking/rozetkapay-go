@@ -6,7 +6,9 @@ import (
 )
 
 // Adds new payment method to wallet.
-func (c *Client) AddWalletCustomerPayment(customerID string, schema *AddWalletCustomerSchema) (*AddWalletCustomerResponse, error) {
+func (c *Client) AddWalletCustomerPayment(customerID string, schema *AddWalletCustomerSchema) (
+	*AddWalletCustomerResponse, error,
+) {
 	req, err := c.NewRequest(
 		http.MethodPost,
 		c.Config.APIURL+"customers/v1/wallet",
@@ -24,7 +26,9 @@ func (c *Client) AddWalletCustomerPayment(customerID string, schema *AddWalletCu
 }
 
 // Returns customer details including payment methods, if saved.
-func (c *Client) GetWalletCustomerPaymentInfo(customerID string) (*GetWalletInfoResponse, error) {
+func (c *Client) GetWalletCustomerPaymentInfo(customerID string) (
+	*GetWalletInfoResponse, error,
+) {
 	req, err := c.NewRequest(
 		http.MethodGet,
 		c.Config.APIURL+"customers/v1/wallet",
@@ -42,7 +46,9 @@ func (c *Client) GetWalletCustomerPaymentInfo(customerID string) (*GetWalletInfo
 }
 
 // Deletes customer payment method from wallet.
-func (c *Client) DeleteWalletCustomerPayment(customerID string, schema *DeleteWalletCustomerSchema) (*DeleteWalletCustomerResponse, error) {
+func (c *Client) DeleteWalletCustomerPayment(customerID string, schema *DeleteWalletCustomerSchema) (
+	*DeleteWalletCustomerResponse, error,
+) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)

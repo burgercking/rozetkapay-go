@@ -7,7 +7,9 @@ import (
 )
 
 // Creates payment and performs desired operation.
-func (c *Client) CreatePayment(schema *CreatePaymentSchema) (*PaymentResponse, error) {
+func (c *Client) CreatePayment(schema *CreatePaymentSchema) (
+	*PaymentResponse, error,
+) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)
@@ -29,7 +31,9 @@ func (c *Client) CreatePayment(schema *CreatePaymentSchema) (*PaymentResponse, e
 }
 
 // Confirm two-step payment.
-func (c *Client) ConfirmPayment(schema *ConfirmPaymentSchema) (*PaymentResponse, error) {
+func (c *Client) ConfirmPayment(schema *ConfirmPaymentSchema) (
+	*PaymentResponse, error,
+) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)
@@ -51,7 +55,9 @@ func (c *Client) ConfirmPayment(schema *ConfirmPaymentSchema) (*PaymentResponse,
 }
 
 // Cancel two-step payment.
-func (c *Client) CancelPayment(schema *CancelPaymentSchema) (*PaymentResponse, error) {
+func (c *Client) CancelPayment(schema *CancelPaymentSchema) (
+	*PaymentResponse, error,
+) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)
@@ -73,7 +79,9 @@ func (c *Client) CancelPayment(schema *CancelPaymentSchema) (*PaymentResponse, e
 }
 
 // Refund one-step payment after withdrawal, or two-step payment after confirmation.
-func (c *Client) RefundPayment(schema *RefundPaymentSchema) (*PaymentResponse, error) {
+func (c *Client) RefundPayment(schema *RefundPaymentSchema) (
+	*PaymentResponse, error,
+) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)
@@ -95,7 +103,9 @@ func (c *Client) RefundPayment(schema *RefundPaymentSchema) (*PaymentResponse, e
 }
 
 // Get payment info by id.
-func (c *Client) GetPaymentInfo(externalID string) (*PaymentInfoResponse, error) {
+func (c *Client) GetPaymentInfo(externalID string) (
+	*PaymentInfoResponse, error,
+) {
 	req, err := c.NewRequest(
 		http.MethodGet,
 		c.Config.APIURL+"payments/v1/info",
@@ -113,7 +123,9 @@ func (c *Client) GetPaymentInfo(externalID string) (*PaymentInfoResponse, error)
 }
 
 // Parsing callback from the body.
-func (c *Client) GetPaymentCallbackFromBytes(body []byte) (*PaymentResponse, error) {
+func (c *Client) GetPaymentCallbackFromBytes(body []byte) (
+	*PaymentResponse, error,
+) {
 	var callback *PaymentResponse
 	if err := json.Unmarshal(body, &callback); err != nil {
 		return nil, err
@@ -123,7 +135,9 @@ func (c *Client) GetPaymentCallbackFromBytes(body []byte) (*PaymentResponse, err
 
 // Prepares the data about the specified payment of transaction and sends it into callback_url which was provided on the payment step.
 // If the operation field is not provided the callback will be sent for the last operation.
-func (c *Client) ResendPaymentCallback(schema *PaymentCallbackResendSchema) (resended bool, err error) {
+func (c *Client) ResendPaymentCallback(schema *PaymentCallbackResendSchema) (
+	resended bool, err error,
+) {
 	err = c.Validator.Struct(schema)
 	if err != nil {
 		return false, fmt.Errorf("%s: %w", ErrFailedToValidate, err)

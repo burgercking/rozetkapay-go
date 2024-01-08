@@ -1,30 +1,16 @@
-[WIP](https://cdn-epdev.rozetkapay.com/public-docs/index.html#section/Introduction)
+[Public API Gateway RozetkaPay](https://docs.google.com/document/d/1AbNXlJlPdzjZcpotd83Qb7GWXt78UhYGRY-GQRWI35M)
 
 ### Payments
 
 - [x] (Create payment)
-- [?] (Confirm payment)
-- [?] (Cancel payment)
+- [x] (Confirm payment)
+- [x] (Cancel payment)
 - [x] (Refund payment)
 - [x] (Payment info)
 - [x] (Resend callback)
 
 ### Customers
 
-- [?] (Delete customer payment from wallet)
+- [x] (Delete customer payment from wallet)
 - [x] (Get customer information & waller)
-- [?] (Add customer payment to wallet)
-
-### Subscriptions
-
-- [ ] (Get plans)
-- [ ] (Create subscription plan)
-- [ ] (Deactivate plan)
-- [ ] (Get plan)
-- [ ] (Update plan)
-- [ ] (Create subscription)
-- [ ] (Deactivate subscription)
-- [ ] (Get subscription)
-- [ ] (Update subscription)
-- [ ] (Subscription payments)
-- [ ] (Get customer subscription)
+- [x] (Add customer payment to wallet)

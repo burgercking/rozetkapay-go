@@ -184,3 +184,11 @@ type (
 		UserAction     PaymentUserAction             `json:"user_action"`
 	}
 )
+
+// Update subscription plan
+type (
+	UpdateSubscriptionPlanSchema struct {
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
+	}
+)

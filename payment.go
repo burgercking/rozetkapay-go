@@ -256,7 +256,6 @@ type (
 		ID string `json:"id"`
 
 		// Block that will be filled in if the parameters are "action_required": True.
-		// Possible types: url.
 		// In this case, you need to initiate a redirect to the address specified in the value parameter to complete the operation (3ds verification).
 		// The parameter will be at host2host requests (type: direct) payment method.
 		Action PaymentUserAction `json:"action"`
@@ -330,16 +329,10 @@ type (
 // Payment create
 type (
 	CustomerData struct {
-		// Available values: CustomerColorModeLight - "light"; CustomerColorModeDark = "dark".
 		// Checkout theme for hosted type of interaction.
 		// If the parameter is not filled in, the default theme will be selected.
 		ColorMode CustomerColorModer `json:"color_mode,omitempty"`
 
-		// Available values:
-		// CustomerCheckoutLocaleUK` = "UK"; CustomerCheckoutLocaleEN = "EN";
-		// CustomerCheckoutLocaleES = "ES"; CustomerCheckoutLocalePL = "PL";
-		// CustomerCheckoutLocaleFR = "FR"; CustomerCheckoutLocaleSK = "SK";
-		// CustomerCheckoutLocaleDE = "DE".
 		// Checkout locale for hosted type of interaction.
 		// If the field is not filled in, the browser locale or the default locale will be selected.
 		Locale CustomerCheckoutLocale `json:"locale,omitempty"`
@@ -392,7 +385,6 @@ type CreatePaymentSchema struct {
 
 	// "True" - the funds will be debited immediately after the payment is made;
 	// "False" - to make a write-off, you need to additionally call the confirm payment method.
-	// https://docs.google.com/document/d/1AbNXlJlPdzjZcpotd83Qb7GWXt78UhYGRY-GQRWI35M/edit#heading=h.n5tet6vz5p3g
 	Confirm bool `json:"confirm,omitempty"`
 
 	// Description of the order.
@@ -571,9 +563,6 @@ const (
 )
 
 type PaymentCallbackResendSchema struct {
-	ExternalID string `json:"external_id" validate:"required"`
-
-	// Payment operation possible values:
-	// CallbackResendOperationPayment - "payment".
-	Operation CallbackResendOperation `json:"operation"`
+	ExternalID string                  `json:"external_id" validate:"required"`
+	Operation  CallbackResendOperation `json:"operation"`
 }
