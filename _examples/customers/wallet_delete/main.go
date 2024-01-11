@@ -9,11 +9,11 @@ import (
 
 func main() {
 	var (
-		cfg    = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
-		client = rozetkapay.NewClient(cfg)
+		cfg     = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
+		manager = rozetkapay.NewManager(cfg)
 	)
 
-	resp, err := client.DeleteWalletCustomerPayment("123123", &rozetkapay.DeleteWalletCustomerSchema{
+	resp, err := manager.DeleteWalletCustomerPayment("123123", &rozetkapay.DeleteWalletCustomerSchema{
 		OptionID: "1332",
 		Type:     rozetkapay.PaymentMethodTypeWallet,
 	})

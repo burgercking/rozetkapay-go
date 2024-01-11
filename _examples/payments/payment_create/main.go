@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/burgercking/rozetkapay-go"
 	"github.com/burgercking/rozetkapay-go/examples"
@@ -12,8 +13,8 @@ import (
 
 func main() {
 	var (
-		cfg    = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
-		client = rozetkapay.NewClient(cfg)
+		cfg     = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
+		manager = rozetkapay.NewManager(cfg, rozetkapay.WithCustomClient(&http.Client{Timeout: time.Second * 20}))
 	)
 
 	http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +25,7 @@ func main() {
 			return
 		}
 
-		callback, err := client.GetPaymentCallbackFromBytes(body)
+		callback, err := manager.GetPaymentCallbackFromBytes(body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Println("err3: ", err)
@@ -47,13 +48,13 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	payment, err := client.CreatePayment(&rozetkapay.CreatePaymentSchema{
+	payment, err := manager.CreatePayment(&rozetkapay.CreatePaymentSchema{
 		Amount:      2000,
 		Currency:    "UAH",
 		ExternalID:  uuid.New().String(),
 		Mode:        rozetkapay.PaymentModeHosted,
 		CallbackURL: cfg.CallbackURL,
-		Confirm:     false,
+		Confirm:     true,
 		Description: "Test payment",
 	})
 	if err != nil {

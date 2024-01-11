@@ -9,8 +9,8 @@ import (
 
 func main() {
 	var (
-		cfg    = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
-		client = rozetkapay.NewClient(cfg)
+		cfg     = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
+		manager = rozetkapay.NewManager(cfg)
 	)
 
 	subs, err := client.GetCustomerSubscriptions("customerID")

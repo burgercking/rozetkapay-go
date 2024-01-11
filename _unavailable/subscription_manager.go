@@ -1,7 +1,6 @@
 package rozetkapay
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -114,7 +113,7 @@ func (c *Client) CreateSubscriptionPlan(schema *CreateSubscriptionPlanSchema) (
 ) {
 	err := c.Validator.Struct(schema)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", ErrFailedToValidate, err)
+		return nil, err
 	}
 	req, err := c.NewRequest(
 		http.MethodPost,

@@ -9,11 +9,11 @@ import (
 
 func main() {
 	var (
-		cfg    = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
-		client = rozetkapay.NewClient(cfg)
+		cfg     = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
+		manager = rozetkapay.NewManager(cfg)
 	)
 
-	canceled, err := client.CancelPayment(&rozetkapay.CancelPaymentSchema{
+	canceled, err := manager.CancelPayment(&rozetkapay.CancelPaymentSchema{
 		ExternalID:  "b9729678-a0fa-47d6-8171-2ea638f31dfa",
 		CallbackURL: cfg.CallbackURL,
 	})

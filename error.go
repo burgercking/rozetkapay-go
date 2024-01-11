@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	ErrFailedToValidate error = errors.New("failed to validate")
+	ErrResponseIsEmpty error = errors.New("response is empty")
 )
 
 // ErrorResponse struct represents the error response structure.

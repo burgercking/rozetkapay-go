@@ -9,11 +9,11 @@ import (
 
 func main() {
 	var (
-		cfg    = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
-		client = rozetkapay.NewClient(cfg)
+		cfg     = rozetkapay.NewDevelopmentConfig().SetCallbackURL(examples.DevEnvironmentCallbackURL)
+		manager = rozetkapay.NewManager(cfg)
 	)
 
-	sended, err := client.ResendPaymentCallback(&rozetkapay.PaymentCallbackResendSchema{
+	sended, err := manager.ResendPaymentCallback(&rozetkapay.PaymentCallbackResendSchema{
 		ExternalID: "06e06b1e-0aeb-42fb-b9d9-40b6cc749d1f",
 		Operation:  rozetkapay.CallbackResendOperationPayment,
 	})
