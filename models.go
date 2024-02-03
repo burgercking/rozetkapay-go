@@ -181,13 +181,13 @@ type (
 
 	PaymentMethodAdditions struct {
 		BrowserFingerPrint BrowserFingerprint `json:"browser_fingerprint,omitempty"`
-		Token              string             `json:"token" validate:"required"`
+		Token              string             `json:"token"`
 		Use3DSFlow         bool               `json:"use_3ds_flow,omitempty"`
 	}
 
 	WalletRequestPaymentMethod struct {
 		BrowserFingerPrint BrowserFingerprint `json:"browser_fingerprint,omitempty"`
-		OptionID           string             `json:"option_id" validate:"required"`
+		OptionID           string             `json:"option_id"`
 		Use3DSFlow         bool               `json:"use_3ds_flow,omitempty"`
 	}
 
@@ -229,7 +229,7 @@ type (
 	}
 
 	Recipient struct {
-		Address       string        `json:"address,omitempty" validate:"lte=50"`
+		Address       string        `json:"address,omitempty"`
 		City          string        `json:"city,omitempty"`
 		Country       string        `json:"country,omitempty"`
 		Email         string        `json:"email,omitempty"`
@@ -340,7 +340,7 @@ type (
 		// Personal account number when refilling services.
 		AccountNumber string `json:"account_number,omitempty"`
 		IPAddress     string `json:"ip_address,omitempty"`
-		Address       string `json:"address,omitempty" validate:"lte=50"`
+		Address       string `json:"address,omitempty"`
 		City          string `json:"city,omitempty"`
 		Country       string `json:"country,omitempty"`
 		Email         string `json:"email,omitempty"`
@@ -353,7 +353,7 @@ type (
 
 		// Block for selecting the payer's payment method.
 		// The field is required for the direct integration method.
-		PaymentMethod PaymentMethod `json:"payment_method,omitempty" validate:"required"`
+		PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 		Phone         string        `json:"phone,omitempty"`
 		PostalCode    string        `json:"postal_code,omitempty"`
 	}
@@ -361,19 +361,19 @@ type (
 
 type CreatePaymentSchema struct {
 	// Amount of the order.
-	Amount float64 `json:"amount" validate:"required"`
+	Amount float64 `json:"amount"`
 
 	// Currency of the order (ISO 4207).
-	Currency string `json:"currency" validate:"required"`
+	Currency string `json:"currency"`
 
 	// Unique order number.
-	ExternalID string `json:"external_id" validate:"required"`
+	ExternalID string `json:"external_id"`
 
 	// Type of interaction, possible values:
 	// "hosted" - returns a link to the payment page;
 	// "direct" - direct host2host interaction.
 	//  When mode is set to direct - customer field becomes required.
-	Mode PaymentMode `json:"mode" validate:"required"`
+	Mode PaymentMode `json:"mode"`
 
 	// Address where the callback with the status of the operation will be sent.
 	// Pass this only if you have not already set it in confg.
@@ -391,10 +391,10 @@ type CreatePaymentSchema struct {
 	Description string `json:"description,omitempty"`
 
 	// Field for additional data. Maximum length 4000 characters
-	Payload string `json:"payload,omitempty" validate:"max=4000"`
+	Payload string `json:"payload,omitempty"`
 
 	// Payer information block.
-	Customer *CustomerData `json:"customer" validate:"required_if=Mode direct"`
+	Customer *CustomerData `json:"customer"`
 
 	// List of products/services in the order.
 	Products []Product `json:"products,omitempty"`
@@ -409,7 +409,7 @@ type CreatePaymentSchema struct {
 // Confirm payment
 type (
 	ConfirmPaymentSchema struct {
-		ExternalID  string  `json:"external_id" validate:"required"`
+		ExternalID  string  `json:"external_id"`
 		Amount      float64 `json:"amount,omitempty"`
 		CallbackURL string  `json:"callback_url,omitempty"`
 		Currency    string  `json:"currency,omitempty"`
@@ -420,7 +420,7 @@ type (
 // Cancel payment
 type (
 	CancelPaymentSchema struct {
-		ExternalID  string  `json:"external_id" validate:"required"`
+		ExternalID  string  `json:"external_id"`
 		Amount      float64 `json:"amount,omitempty"`
 		CallbackURL string  `json:"callback_url,omitempty"`
 		Currency    string  `json:"currency,omitempty"`
@@ -431,8 +431,8 @@ type (
 // Refund payment
 type (
 	RefundPaymentSchema struct {
-		ExternalID  string  `json:"external_id" validate:"required"`
-		Amount      float64 `json:"amount,omitempty" validate:"required"`
+		ExternalID  string  `json:"external_id"`
+		Amount      float64 `json:"amount,omitempty"`
 		CallbackURL string  `json:"callback_url,omitempty"`
 		Currency    string  `json:"currency,omitempty"`
 		Payload     string  `json:"payload,omitempty"`
@@ -563,7 +563,7 @@ const (
 )
 
 type PaymentCallbackResendSchema struct {
-	ExternalID string                  `json:"external_id" validate:"required"`
+	ExternalID string                  `json:"external_id"`
 	Operation  CallbackResendOperation `json:"operation"`
 }
 
@@ -572,7 +572,7 @@ type (
 	AddWalletCustomerSchema struct {
 		CallbackURL   string        `json:"callback_url"`
 		ResultURL     string        `json:"result_url"`
-		PaymentMethod PaymentMethod `json:"payment_method" validate:"required"`
+		PaymentMethod PaymentMethod `json:"payment_method"`
 	}
 
 	AddWalletCustomerPaymentMethod struct {
@@ -624,8 +624,8 @@ type (
 // Delete wallet customer
 type (
 	DeleteWalletCustomerSchema struct {
-		OptionID string            `json:"option_id" validate:"required"`
-		Type     PaymentMethodType `json:"type" validate:"required"`
+		OptionID string            `json:"option_id"`
+		Type     PaymentMethodType `json:"type"`
 	}
 
 	DeleteWalletCustomerResponse struct {

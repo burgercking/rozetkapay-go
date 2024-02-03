@@ -3,14 +3,11 @@ package rozetkapay
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
-	"log/slog"
 	"net/http"
-
-	"github.com/go-playground/validator/v10"
+	"os"
 )
-
-var v = validator.New()
 
 type Manager struct {
 	Config *Config
@@ -43,10 +40,12 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 	}
 
 	if m.Config.IsDebug {
-		slog.Info("RozetkaPay",
-			slog.String("type", "request"),
-			slog.String("method", req.Method),
-			slog.String("url", req.URL.String()),
+		fmt.Fprintf(
+			os.Stdout,
+			"[ERROR] type: %s, method: %s, url: %s\n",
+			"request",
+			req.Method,
+			req.URL.String(),
 		)
 	}
 
@@ -70,17 +69,15 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 			return err
 		}
 
-		if m.Config.IsDebug {
-			slog.Error("RozetkaPay error",
-				slog.String("type", "response"),
-				slog.String("method", req.Method),
-				slog.String("url", req.URL.String()),
-				slog.Any("code", errResp.Code),
-				slog.String("message", errResp.Message),
-				slog.String("payment_id", errResp.PaymentID),
-				slog.String("type", errResp.Type),
-			)
-		}
+		fmt.Fprintf(
+			os.Stdout,
+			"[ERROR] type: %s, code: %s, message: %s, payment_id: %s, type: %s\n",
+			errResp.Type,
+			errResp.Code,
+			errResp.Message,
+			errResp.PaymentID,
+			errResp.Type,
+		)
 
 		return errResp.ErrorCode()
 	}
@@ -90,17 +87,18 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 	}
 
 	if m.Config.IsDebug {
-		slog.Info("RozetkaPay",
-			slog.String("type", "response"),
-			slog.String("method", req.Method),
-			slog.String("url", req.URL.String()),
-			slog.Int("code", resp.StatusCode),
-			slog.Int("bytes", len(body)),
+		fmt.Fprintf(
+			os.Stdout,
+			"[DEBUG] type: %s, method: %s, url: %s, code: %d, bytes: %d\n",
+			"response",
+			req.Method,
+			req.URL.String(),
+			resp.StatusCode,
+			len(body),
 		)
 	}
 
-	err = json.Unmarshal(body, v)
-	return err
+	return json.Unmarshal(body, v)
 }
 
 func (m *Manager) NewRequest(method, url string, payload interface{}, query map[string]string) (
@@ -133,10 +131,6 @@ func (m *Manager) NewRequest(method, url string, payload interface{}, query map[
 func (m *Manager) CreatePayment(schema *CreatePaymentSchema) (
 	*PaymentResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"payments/v1/new",
@@ -157,10 +151,6 @@ func (m *Manager) CreatePayment(schema *CreatePaymentSchema) (
 func (m *Manager) ConfirmPayment(schema *ConfirmPaymentSchema) (
 	*PaymentResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"payments/v1/confirm",
@@ -181,10 +171,6 @@ func (m *Manager) ConfirmPayment(schema *ConfirmPaymentSchema) (
 func (m *Manager) CancelPayment(schema *CancelPaymentSchema) (
 	*PaymentResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"payments/v1/cancel",
@@ -205,10 +191,6 @@ func (m *Manager) CancelPayment(schema *CancelPaymentSchema) (
 func (m *Manager) RefundPayment(schema *RefundPaymentSchema) (
 	*PaymentResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"payments/v1/refund",
@@ -261,10 +243,6 @@ func (m *Manager) GetPaymentCallbackFromBytes(body []byte) (
 func (m *Manager) ResendPaymentCallback(schema *PaymentCallbackResendSchema) (
 	resended bool, err error,
 ) {
-	err = v.Struct(schema)
-	if err != nil {
-		return false, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"payments/v1/callback/resend",
@@ -284,10 +262,6 @@ func (m *Manager) ResendPaymentCallback(schema *PaymentCallbackResendSchema) (
 func (m *Manager) AddWalletCustomerPayment(customerID string, schema *AddWalletCustomerSchema) (
 	*AddWalletCustomerResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodPost,
 		m.Config.API+"customers/v1/wallet",
@@ -328,10 +302,6 @@ func (m *Manager) GetWalletCustomerPaymentInfo(customerID string) (
 func (m *Manager) DeleteWalletCustomerPayment(customerID string, schema *DeleteWalletCustomerSchema) (
 	*DeleteWalletCustomerResponse, error,
 ) {
-	err := v.Struct(schema)
-	if err != nil {
-		return nil, err
-	}
 	req, err := m.NewRequest(
 		http.MethodDelete,
 		m.Config.API+"customers/v1/wallet",
