@@ -15,7 +15,7 @@ type Config struct {
 	BasicAuth   string
 	ResultURL   string
 	CallbackURL string
-	IsDebug     bool
+	Debug       bool
 }
 
 func NewConfig(login, password string) *Config {
@@ -32,8 +32,8 @@ func NewDevelopmentConfig() *Config {
 		BasicAuth: base64.StdEncoding.EncodeToString(
 			[]byte(DevLogin + ":" + DevPassword),
 		),
-		API:     API_URL,
-		IsDebug: true,
+		API:   API_URL,
+		Debug: true,
 	}
 }
 
@@ -48,6 +48,6 @@ func (c *Config) SetResultURL(resultURL string) *Config {
 }
 
 func (c *Config) SetDebugMode(debug bool) *Config {
-	c.IsDebug = debug
+	c.Debug = debug
 	return c
 }

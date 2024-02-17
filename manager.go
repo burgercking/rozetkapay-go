@@ -3,10 +3,9 @@ package rozetkapay
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
-	"os"
 )
 
 type Manager struct {
@@ -39,10 +38,9 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 		"Authorization": {"Basic " + m.Config.BasicAuth},
 	}
 
-	if m.Config.IsDebug {
-		fmt.Fprintf(
-			os.Stdout,
-			"[ERROR] type: %s, method: %s, url: %s\n",
+	if m.Config.Debug {
+		log.Printf(
+			"[RozetkaPay] Debug --- type: %s, method: %s, url: %s\n",
 			"request",
 			req.Method,
 			req.URL.String(),
@@ -69,9 +67,8 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 			return err
 		}
 
-		fmt.Fprintf(
-			os.Stdout,
-			"[ERROR] type: %s, code: %s, message: %s, payment_id: %s, type: %s\n",
+		log.Printf(
+			"[RozetkaPay] Error --- type: %s, code: %s, message: %s, payment_id: %s, type: %s\n",
 			errResp.Type,
 			errResp.Code,
 			errResp.Message,
@@ -86,10 +83,9 @@ func (m *Manager) Send(req *http.Request, v interface{}) error {
 		return nil
 	}
 
-	if m.Config.IsDebug {
-		fmt.Fprintf(
-			os.Stdout,
-			"[DEBUG] type: %s, method: %s, url: %s, code: %d, bytes: %d\n",
+	if m.Config.Debug {
+		log.Printf(
+			"[RozetkaPay] Debug --- type: %s, method: %s, url: %s, code: %d, bytes: %d\n",
 			"response",
 			req.Method,
 			req.URL.String(),
